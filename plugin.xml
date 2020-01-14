@@ -26,7 +26,6 @@
     </js-module>
 
     <platform name="ios">
-        <hook type="after_plugin_install" src="../../scripts/ios/ios-config-jpush.js" />
         <config-file target="config.xml" parent="/*">
             <feature name="JPushPlugin">
                 <param name="ios-package" value="JPushPlugin" />
