@@ -1,18 +1,18 @@
-package cn.jiguang.cordova.push;
+package cn.jpush.phonegap;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import cn.jpush.android.api.JPushInterface;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 public class MyReceiver extends BroadcastReceiver {
-
+    private static String TAG = "JPushPlugin";
     private static final List<String> IGNORED_EXTRAS_KEYS =
             Arrays.asList(
                     "cn.jpush.android.TITLE",
@@ -24,15 +24,18 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if (action.equals(JPushInterface.ACTION_REGISTRATION_ID)) {
-            String rId = intent.getStringExtra(JPushInterface.EXTRA_REGISTRATION_ID);
-            JPushPlugin.transmitReceiveRegistrationId(rId);
-        } else if (action.equals(JPushInterface.ACTION_MESSAGE_RECEIVED)) {
+        if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(action)) {
             handlingMessageReceive(intent);
-        } else if (action.equals(JPushInterface.ACTION_NOTIFICATION_RECEIVED)) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(action)) {
             handlingNotificationReceive(context, intent);
-        } else if (action.equals(JPushInterface.ACTION_NOTIFICATION_OPENED)) {
+        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(action)) {
             handlingNotificationOpen(context, intent);
+        } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(action)) {
+            // 当在 HTML 页面中调用 JPushWeb.triggerNativeAction(String params) 方法时触发此方法，
+            // 再进行相关的操作。
+            
+        } else {
+            Log.d(TAG, "Unhandled intent - " + action);
         }
     }
 
@@ -43,6 +46,8 @@ public class MyReceiver extends BroadcastReceiver {
     }
 
     private void handlingNotificationOpen(Context context, Intent intent) {
+        Log.i(TAG, "----------------  handlingNotificationOpen");
+
         String title = intent.getStringExtra(JPushInterface.EXTRA_NOTIFICATION_TITLE);
         JPushPlugin.openNotificationTitle = title;
 
@@ -55,13 +60,15 @@ public class MyReceiver extends BroadcastReceiver {
         JPushPlugin.transmitNotificationOpen(title, alert, extras);
 
         Intent launch = context.getPackageManager().getLaunchIntentForPackage(
-                context.getPackageName());
+            context.getPackageName());
         launch.addCategory(Intent.CATEGORY_LAUNCHER);
         launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(launch);
     }
 
     private void handlingNotificationReceive(Context context, Intent intent) {
+        Log.i(TAG, "----------------  handlingNotificationReceive");
+
         Intent launch = context.getPackageManager().getLaunchIntentForPackage(
                 context.getPackageName());
         launch.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -92,4 +99,5 @@ public class MyReceiver extends BroadcastReceiver {
         }
         return extrasMap;
     }
+
 }

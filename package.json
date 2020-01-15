@@ -1,6 +1,6 @@
 {
   "name": "jpush-phonegap-plugin",
-  "version": "3.2.13",
+  "version": "3.0.3",
   "description": "JPush for cordova plugin",
   "cordova": {
     "id": "jpush-phonegap-plugin",
@@ -21,9 +21,14 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "devDependencies": {
-    "cordova-plugin-device": "*",
-    "cordova-plugin-jcore": "1.1.0"
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0"
+    }
+  ],
+  "peerDependencies": {
+    "cordova-plugin-device": ">=1.0.0"
   },
   "author": "JiGuang",
   "license": "MIT",
@@ -32,5 +37,8 @@
   },
   "homepage": "https://github.com/jpush/jpush-phonegap-plugin#readme",
 
-  "dependencies": {}
+  "dependencies": {
+  "cordova-plugin-device": "*",
+    "cordova-plugin-jcore": "1.1.0"
+  }
 }

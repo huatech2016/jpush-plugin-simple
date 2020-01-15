@@ -7,7 +7,7 @@
 	<key>Channel</key>
 	<string>channel name</string>
 	<key>IsProduction</key>
-	<true/>
+	<false/>
 	<key>IsIDFA</key>
 	<false/>
 	<key>Delay</key>
